@@ -7,39 +7,46 @@
 #include "facemask.hpp"
 #include "Utils.hpp"
 
-using namespace std;
-using namespace cv;
 
 // Function Headers
-std::vector<Point> detect(Mat frame);
+std::vector<cv::Point> detect(cv::Mat frame);
 
 
 // Global variables
-String face_cascade_name = "/home/dmitriy/Applications-CV/opencv-3.2.0/data/haarcascades/haarcascade_frontalface_alt.xml";
-String eyes_cascade_name = "/home/dmitriy/Applications-CV/opencv-3.2.0/data/haarcascades/haarcascade_eye_tree_eyeglasses.xml";
-CascadeClassifier face_cascade;
-CascadeClassifier eyes_cascade;
-String window_name2 = "Capture - Face detection2";
+cv::String face_cascade_name = "/home/dmitriy/Applications-CV/opencv-3.2.0/data/haarcascades/haarcascade_frontalface_alt.xml";
+cv::String eyes_cascade_name = "/home/dmitriy/Applications-CV/opencv-3.2.0/data/haarcascades/haarcascade_eye_tree_eyeglasses.xml";
+cv::CascadeClassifier face_cascade;
+cv::CascadeClassifier eyes_cascade;
+cv::String window_name2 = "Capture - Face detection2";
 
 
 int main( void )
 {
-    VideoCapture capture;
-    Mat frame;
-    Glasses exp;
+    cv::VideoCapture capture;
+    cv::Mat frame;
 
-    if( !face_cascade.load( face_cascade_name ) ){ printf("Error loading face cascade\n"); return -1; };
-    if( !eyes_cascade.load( eyes_cascade_name ) ){ printf("Error loading eyes cascade\n"); return -1; };
+    if( !face_cascade.load( face_cascade_name ) ) {
+        std::cout << "Error loading face cascade" << std::endl;
+        return EXIT_FAILURE;
+    }
+    if( !eyes_cascade.load( eyes_cascade_name ) ) {
+        std::cout << "Error loading eyes cascade" << std::endl;
+        return EXIT_FAILURE;
+    }
 
 
     capture.open( -1 );
-    if ( ! capture.isOpened() ) { printf("--(!)Error opening video capture\n"); return -1; }
+    if ( ! capture.isOpened() ) {
+        std::cout << "Error opening video capture" << std::endl;
+        return EXIT_FAILURE;
+    }
+    FaceMask* currrent_object;
+    Glasses glass;
+    currrent_object = &glass;
 
     try {
-        Glasses glass;
 
-
-        vector<Point> points;
+        std::vector<cv::Point> points;
         while ( capture.read(frame) )
         {
 
@@ -47,21 +54,22 @@ int main( void )
 
             if( frame.empty() )
             {
-                printf(" --(!) No captured frame -- Break!");
+                std::cout << "No captured frame!" << std::endl;
                 break;
             }
 
             points = detect(frame);
-            glass.SetMask(points, frame);
+            currrent_object->SetMask(points, frame);
             imshow(window_name2, frame);
 
 
-            int c = waitKey(33);
-            if( c == 27 ) { break; } // escape
+            int c = cv::waitKey(33);
+            if( c == 27 )
+                break; // escape
         }
 
     }
-    catch(myException except) {
+    catch(MyException except) {
         except.ShowError();
         return EXIT_FAILURE;
     }
@@ -69,7 +77,7 @@ int main( void )
 }
 
 
-std::vector<Point> detect(Mat frame) {
+std::vector<cv::Point> detect(cv::Mat frame) {
     std::vector<Rect> faces;
     Mat frame_gray;
 
@@ -121,7 +129,7 @@ std::vector<Point> detect(Mat frame) {
     vector<Point> points = { center, eye_center_1, eye_center_2, down };
     return points;
 }
-void DrawsLines(vector<Point> points, Mat frame) {
+void DrawsLines(std::vector<cv::Point> points, cv::Mat frame) {
 
     Scalar yellow(0, 250, 250);
     Scalar red(167, 50, 150);
