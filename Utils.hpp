@@ -7,10 +7,21 @@
 
 #include <opencv2/core/types.hpp>
 #include <iostream>
+#include <opencv2/objdetect.hpp>
 
-class myException {
+
+// Global variables
+static cv::String face_cascade_name = "/home/dmitriy/Applications-CV/opencv-3.2.0/data/haarcascades/haarcascade_frontalface_alt.xml";
+static cv::String eyes_cascade_name = "/home/dmitriy/Applications-CV/opencv-3.2.0/data/haarcascades/haarcascade_eye_tree_eyeglasses.xml";
+static cv::CascadeClassifier face_cascade;
+static cv::CascadeClassifier eyes_cascade;
+
+static cv::String window_name2 = "Capture - Face detection2";
+
+
+class MyException {
 public:
-    myException(std::string name = "file!"):
+    MyException(std::string name = "file!"):
             error("Can't load ") { error += name; }
 
     void ShowError() { std::cout << error << std::endl; }

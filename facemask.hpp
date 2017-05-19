@@ -12,10 +12,8 @@ public:
 
     virtual void SetMask(std::vector<cv::Point> &_points,
                          cv::Mat frame) = 0;
-    cv::Mat getIco();
 
 protected:
-    cv::Mat ico;
     cv::Mat original_object;
     cv::Mat transform_object;
     cv::Mat mask;
@@ -25,6 +23,26 @@ class Glasses: public FaceMask {
 public:
     Glasses();
     ~Glasses();
+
+    void SetMask(std::vector<cv::Point> &_points, cv::Mat frame);
+
+private:
+    cv::Point2f* OriginalPoints;
+};
+class Glasses_Red: public FaceMask {
+public:
+    Glasses_Red();
+    ~Glasses_Red();
+
+    void SetMask(std::vector<cv::Point> &_points, cv::Mat frame);
+
+private:
+    cv::Point2f* OriginalPoints;
+};
+class Glasses_Blue: public FaceMask {
+public:
+    Glasses_Blue();
+    ~Glasses_Blue();
 
     void SetMask(std::vector<cv::Point> &_points, cv::Mat frame);
 
