@@ -100,10 +100,9 @@ void OpenFace::NextStep() {
         throw MyException("capture frame");
     getPivotPoints(frame);
     current_mask->SetMask(pivot_points, frame);
-//    emit send_frame(frame);
-    imshow(window_name2, frame);
+    emit send_frame(frame);
 }
 
-//void OpenFace::change_mask(int mask_id) {
-//    ChangeMask(mask_id);
-//}
+void OpenFace::change_mask(int mask_id) {
+    ChangeMask(mask_id);
+}

@@ -12,16 +12,16 @@ Q_OBJECT
 
 public:
     Interface(int width, int height);
-//
-//    QVBoxLayout* vert_layout;
-//    QHBoxLayout* horz_layout;
-//
-//    QPushButton* first_button;
-//    QPushButton* second_button;
-//    QPushButton* third_button;
-    QLabel* camera;
 
 private:
+    QVBoxLayout* vert_layout;
+    QHBoxLayout* horz_layout;
+
+    QPushButton* first_button;
+    QPushButton* second_button;
+    QPushButton* third_button;
+    QLabel* camera;
+    QImage image;
 
 public slots:
     void show_image(cv::Mat &frame);

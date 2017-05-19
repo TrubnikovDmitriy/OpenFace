@@ -17,8 +17,6 @@ opencv2/videoio.hpp
 -
 Interface.hpp
 /home/dmitriy/TPark/C++/OpenFace/Interface.hpp
-iostream
--
 
 /home/dmitriy/TPark/C++/OpenFace/Interface.hpp
 QtCore/QObject

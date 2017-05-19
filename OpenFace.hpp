@@ -27,7 +27,7 @@ private:
     Interface* interface;
 
 public slots:
-//    void change_mask(int mask_id);
+    void change_mask(int mask_id);
 //    void make_photo();
 signals:
     void send_frame(cv::Mat &frame);
