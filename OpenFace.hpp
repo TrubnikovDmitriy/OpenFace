@@ -5,7 +5,7 @@
 #include "facemask.hpp"
 #include "Interface.hpp"
 
-class OpenFace: public QObject {
+class OpenFace: public QWidget {
 Q_OBJECT
 
 public:
@@ -14,7 +14,7 @@ public:
 
     void ChangeMask(int mask_id);
     void MakePhoto();
-    void NextStep();
+    bool NextStep();
 
 private:
     void getPivotPoints(cv::Mat frame);
@@ -23,11 +23,13 @@ private:
     std::vector<cv::Point> pivot_points;
     cv::VideoCapture capture;
     FaceMask* current_mask;
-    cv::Mat frame;
     Interface* interface;
+    cv::Mat frame;
+    bool isActive;
 
 public slots:
     void change_mask(int mask_id);
+    void close();
 //    void make_photo();
 signals:
     void send_frame(cv::Mat &frame);

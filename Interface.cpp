@@ -1,37 +1,41 @@
+#include <vector>
+#include <opencv2/videoio.hpp>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QLabel>
-#include <QPushButton>
-#include <opencv2/videoio.hpp>
 #include "Interface.hpp"
+#include "Utils.hpp"
 
-Interface::Interface(int width, int height): QWidget(nullptr) {
 
-    vert_layout = new QVBoxLayout(this);
-    horz_layout = new QHBoxLayout(this);
+Interface::Interface(): QWidget(nullptr) {
 
-    first_button = new QPushButton("1");
-    second_button = new QPushButton("2");
-    third_button = new QPushButton("3");
+    signal_map = new QSignalMapper(this);
     camera = new QLabel;
+    vert_layout = new QVBoxLayout(this);
+    horz_layout = new QHBoxLayout();
 
-    horz_layout->addWidget(first_button);
-    horz_layout->addWidget(second_button);
-    horz_layout->addWidget(third_button);
+    for (int i = 0; i < MASK_NUMBER; ++i) {
 
+        mask_buttons.push_back(Button("../masks/glass_" + QString::number(i) + ".png"));
+        horz_layout->addWidget(mask_buttons[i].button);
 
-    vert_layout->addWidget(camera, 5);
+        QObject::connect(mask_buttons[i].button, SIGNAL(clicked()), signal_map, SLOT(map()));
+        signal_map->setMapping(mask_buttons[i].button, i);
+    }
+
+    this->resize(MIN_WINDOW_SIZE);
+
+    vert_layout->addWidget(camera);
     vert_layout->addLayout(horz_layout);
-
     this->setLayout(vert_layout);
-
-    this->resize(width, height + 100);
-    camera->resize(width, height);
-    this->show();
-
 }
 
 void Interface::show_image(cv::Mat &frame) {
 
     image = QImage(frame.data, frame.cols, frame.rows, (int)frame.step, QImage::Format_RGB888);
     camera->setPixmap(QPixmap::fromImage(image));
+}
+void Interface::closeEvent(QCloseEvent *event) {
+
+    emit close();
+    event->accept();
 }

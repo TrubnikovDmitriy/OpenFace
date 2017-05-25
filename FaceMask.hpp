@@ -14,7 +14,7 @@ public:
                          cv::Mat frame) = 0;
 
 protected:
-    const cv::Mat original_object;
+    cv::Mat original_object;
     cv::Mat transform_object;
     cv::Mat mask;
 };
@@ -38,7 +38,6 @@ public:
 
 private:
     cv::Point2f* OriginalPoints;
-    const cv::Mat black_original;
 };
 class Glasses_Blue: public FaceMask {
 public:
@@ -49,7 +48,6 @@ public:
 
 private:
     cv::Point2f* OriginalPoints;
-    const cv::Mat black_original;
 };
 
 #endif //OPENFACE_FACEMASK_HPP

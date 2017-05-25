@@ -1,46 +1,39 @@
 #include <cassert>
-
 #include "OpenFace.hpp"
-#include "Interface.hpp"
-#include "facemask.hpp"
 #include "Utils.hpp"
 
 
 OpenFace::OpenFace() {
 
     data_face = {
-
             new Glasses,
-            new Glasses_Blue,
-            new Glasses_Red
+            new Glasses_Red,
+            new Glasses_Blue
     };
     current_mask = data_face[0];
+    isActive = true;
 
-    if( !face_cascade.load( face_cascade_name ) ) {
-        std::cout << "Error loading face cascade" << std::endl;
+    if(!face_cascade.load(face_cascade_name))
         throw MyException("face cascade");
-    }
-    if( !eyes_cascade.load( eyes_cascade_name ) ) {
-        std::cout << "Error loading eyes cascade" << std::endl;
+    if(!eyes_cascade.load(eyes_cascade_name))
         throw MyException("eyes cascade");
-    }
 
     capture.open( -1 );
-    if ( ! capture.isOpened() ) {
-        std::cout << "Error opening video capture" << std::endl;
+    if (!capture.isOpened())
         throw MyException("camera");
 
-    }
-    interface = new Interface((int)capture.get(cv::CAP_PROP_FRAME_WIDTH), (int)capture.get(cv::CAP_PROP_FRAME_HEIGHT));
-    QObject::connect(this, SIGNAL(send_frame(cv::Mat&)), interface, SLOT(show_image(cv::Mat&)));
+    interface = new Interface();
+    interface->show();
 
-//    interface->show();
+    QObject::connect(this, SIGNAL(send_frame(cv::Mat&)), interface, SLOT(show_image(cv::Mat&)));
+    QObject::connect(interface->signal_map, SIGNAL(mapped(int)), this, SLOT(change_mask(int)));
+    QObject::connect(interface, SIGNAL(close()), this, SLOT(close()));
 
 }
 OpenFace::~OpenFace() {
 
     delete interface;
-    for (int i = 0; i < data_face.size(); ++i)
+    for (u_int i = 0; i < data_face.size(); ++i)
         delete data_face[i];
 
 }
@@ -93,16 +86,23 @@ void OpenFace::ChangeMask(int mask_id) {
     assert((unsigned)mask_id < data_face.size());
     current_mask = data_face[mask_id];
 }
-void OpenFace::NextStep() {
+bool OpenFace::NextStep() {
 
     capture.read(frame);
     if(frame.empty())
-        throw MyException("capture frame");
+        throw MyException("frame empty");
+//    frame = cv::imread("./bin/images/masks/1.jpg");
     getPivotPoints(frame);
     current_mask->SetMask(pivot_points, frame);
+    // OpenCV использует канал BGR, а Qt канал RGB.
+    // Для корректной цветопередачи необходимо конвертировать
+    cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB);
     emit send_frame(frame);
+    return isActive;
 }
-
 void OpenFace::change_mask(int mask_id) {
     ChangeMask(mask_id);
+}
+void OpenFace::close() {
+    isActive = false;
 }

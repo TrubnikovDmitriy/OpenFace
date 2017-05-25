@@ -2,29 +2,34 @@
 #define OPENFACE_INTERFACE_HPP
 
 #include <QtCore/QObject>
-#include <opencv2/core/mat.hpp>
-#include <QtWidgets/QDialog>
 #include <QtWidgets>
+#include <opencv2/core/mat.hpp>
+#include "Button.hpp"
 
 
 class Interface: public QWidget {
 Q_OBJECT
 
 public:
-    Interface(int width, int height);
+    Interface();
+    QSignalMapper* signal_map;
 
 private:
+    std::vector<Button> mask_buttons;
     QVBoxLayout* vert_layout;
     QHBoxLayout* horz_layout;
 
-    QPushButton* first_button;
-    QPushButton* second_button;
-    QPushButton* third_button;
     QLabel* camera;
     QImage image;
 
+protected:
+    void closeEvent(QCloseEvent* event);
+
 public slots:
     void show_image(cv::Mat &frame);
+
+signals:
+    void close();
 };
 
 #endif //OPENFACE_INTERFACE_HPP

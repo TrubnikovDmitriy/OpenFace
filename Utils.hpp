@@ -6,18 +6,20 @@
 #define OPENFACE_UTILS_HPP
 
 #include <opencv2/core/types.hpp>
-#include <iostream>
 #include <opencv2/objdetect.hpp>
+#include <iostream>
+
+#define ICON_SIZE QSize(100, 100)
+#define BUTTON_SIZE QSize(10, 50)
+#define MIN_WINDOW_SIZE QSize(10, 10)
+#define MASK_NUMBER 3
 
 
 // Global variables
-static cv::String face_cascade_name = "/home/dmitriy/Applications-CV/opencv-3.2.0/data/haarcascades/haarcascade_frontalface_alt.xml";
-static cv::String eyes_cascade_name = "/home/dmitriy/Applications-CV/opencv-3.2.0/data/haarcascades/haarcascade_eye_tree_eyeglasses.xml";
+static cv::String face_cascade_name = "../haarcascades/haarcascade_frontalface_default.xml";
+static cv::String eyes_cascade_name = "../haarcascades/haarcascade_eye_tree_eyeglasses.xml";
 static cv::CascadeClassifier face_cascade;
 static cv::CascadeClassifier eyes_cascade;
-
-static cv::String window_name2 = "Capture - Face detection2";
-
 
 class MyException {
 public:
