@@ -1,4 +1,0 @@
-/home/dmitriy/TPark/C++/OpenFace/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/dmitriy/TPark/C++/OpenFace/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/dmitriy/TPark/C++/OpenFace/cmake-build-debug/CMakeFiles/OpenFace.dir
-/home/dmitriy/TPark/C++/OpenFace/cmake-build-debug/CMakeFiles/OpenFace_automoc.dir
