@@ -61,7 +61,8 @@ void Glasses::SetMask(std::vector<cv::Point> &points, cv::Mat frame) {
     warpAffine(original_object, transform_object, affine, transform_object.size(),
                cv::INTER_AREA, cv::BORDER_CONSTANT, cv::Scalar(255,255,255));
 
-    threshold(transform_object, mask, 100,  255, CV_THRESH_BINARY_INV);
+    threshold(transform_object, mask, MIN_THRESEHOLD,
+              MAX_THRESEHOLD, CV_THRESH_BINARY_INV);
     transform_object.copyTo(frame, mask);
 }
 
@@ -117,7 +118,8 @@ void Glasses_Red::SetMask(std::vector<cv::Point> &points, cv::Mat frame) {
     cv::Mat affine = getAffineTransform(OriginalPoints, TransformPoints);
     warpAffine(black_original, transform_object, affine, transform_object.size(),
                cv::INTER_AREA, cv::BORDER_CONSTANT, cv::Scalar(255,255,255));
-    threshold(transform_object, mask, 100,  255, CV_THRESH_BINARY_INV);
+    threshold(transform_object, mask, MIN_THRESEHOLD,
+              MAX_THRESEHOLD, CV_THRESH_BINARY_INV);
 
     warpAffine(original_object, transform_object, affine, transform_object.size(),
                cv::INTER_AREA, cv::BORDER_CONSTANT, cv::Scalar(255,255,255));
@@ -143,8 +145,7 @@ void Glasses_Blue::SetMask(std::vector<cv::Point> &points, cv::Mat frame) {
         (points[1].x < points[0].x && points[2].x < points[0].x) )
         return; // Чтобы очки не съезжали на один глаз.
 
-    mask = cv::Mat::zeros(frame.size(),
-                          original_object.type());
+    mask = cv::Mat::zeros(frame.size(), original_object.type());
     mask.copyTo(transform_object);
 
     float length = OriginalPoints[1].x - OriginalPoints[0].x;
@@ -176,10 +177,10 @@ void Glasses_Blue::SetMask(std::vector<cv::Point> &points, cv::Mat frame) {
     cv::Mat affine = getAffineTransform(OriginalPoints, TransformPoints);
     warpAffine(black_original, transform_object, affine, transform_object.size(),
                cv::INTER_AREA, cv::BORDER_CONSTANT, cv::Scalar(255,255,255));
-    threshold(transform_object, mask, 100,  255, CV_THRESH_BINARY_INV);
+    threshold(transform_object, mask, MIN_THRESEHOLD,
+              MAX_THRESEHOLD, CV_THRESH_BINARY_INV);
 
     warpAffine(original_object, transform_object, affine, transform_object.size(),
                cv::INTER_AREA, cv::BORDER_CONSTANT, cv::Scalar(255,255,255));
     transform_object.copyTo(frame, mask);
 }
-

@@ -13,6 +13,8 @@
 #define BUTTON_SIZE QSize(10, 50)
 #define MIN_WINDOW_SIZE QSize(10, 10)
 #define MASK_NUMBER 3
+#define MIN_THRESEHOLD 100
+#define MAX_THRESEHOLD 255
 
 
 // Global variables
